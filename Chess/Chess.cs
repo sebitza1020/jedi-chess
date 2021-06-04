@@ -163,7 +163,7 @@ namespace Chess
             }
 
             // elimina
-            if (this.Board.Grid[m.to.number][m.to.letter].piece != Piece.NONE || LegalMoveSet.isEnPassant(this.Board, m))
+            if (this.Board.Grid[m.to.number][m.to.letter].piece != Piece.NONE)
             {
                 move += "x";
             }
@@ -214,7 +214,7 @@ namespace Chess
                 if (LegalMoveSet.isCheck(this.Board, this.Turn))
                 {
                     this.m_UI.LogMove("Checkmate!\n");
-                    this.m_UI.SetStatus(false, ((this.Turn == Player.JEDI) ? "Black" : "White") + " wins!");
+                    this.m_UI.SetStatus(false, ((this.Turn == Player.JEDI) ? "Jedi" : "Sith") + " wins!");
                 }
                 else
                 {

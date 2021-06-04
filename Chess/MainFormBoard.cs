@@ -100,8 +100,7 @@ namespace Chess
                             foreach (position_t move in moves)
                             {
                                 if ((chess.Board.Grid[move.number][move.letter].player != chess.Turn
-                                    && chess.Board.Grid[move.number][move.letter].piece != Piece.NONE)
-                                    || LegalMoveSet.isEnPassant(chess.Board, new move_t(chess.Selection, move)))
+                                    && chess.Board.Grid[move.number][move.letter].piece != Piece.NONE))
                                 {
                                     Board[move.number][move.letter].BackColor = Color.Red;
                                 }

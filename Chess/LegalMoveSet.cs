@@ -13,18 +13,12 @@ namespace Chess
             // creaza o copie a tablei
             ChessBoard b2 = new ChessBoard(b); 
 
-            bool enpassant = (b2.Grid[m.from.number][m.from.letter].piece == Piece.TROOPS && isEnPassant(b2, m));
             bool castle = (b2.Grid[m.from.number][m.from.letter].piece == Piece.GRANDMASTER && Math.Abs(m.to.letter - m.from.letter) == 2);
 
             b2.Pieces[b2.Grid[m.from.number][m.from.letter].player].Remove(m.from);
 
             if (b2.Grid[m.to.number][m.to.letter].piece != Piece.NONE && b2.Grid[m.from.number][m.from.letter].player != b2.Grid[m.to.number][m.to.letter].player)
                 b2.Pieces[b2.Grid[m.to.number][m.to.letter].player].Remove(m.to);
-            else if(enpassant) 
-            {
-                int step = (b.Grid[m.from.number][m.from.letter].player == Player.JEDI) ? -1 : 1;
-                b2.Pieces[b2.Grid[m.to.number + step][m.to.letter].player].Remove(new position_t(m.to.letter, m.to.number + step));
-            }
             else if (castle)
             {
                 if (m.to.letter == 6)
@@ -44,12 +38,7 @@ namespace Chess
             b2.Grid[m.to.number][m.to.letter] = new piece_t(b2.Grid[m.from.number][m.from.letter]);
             b2.Grid[m.to.number][m.to.letter].lastPosition = m.from;
             b2.Grid[m.from.number][m.from.letter].piece = Piece.NONE;
-            if (enpassant)
-            {
-                int step = (b.Grid[m.from.number][m.from.letter].player == Player.JEDI) ? -1 : 1;
-                b2.Grid[m.to.number + step][m.to.letter].piece = Piece.NONE;
-            }
-            else if (castle)
+            if (castle)
             {
                 if (m.to.letter == 6)
                 {
@@ -461,10 +450,6 @@ namespace Chess
                 {
                     moves.Add(moved);
                 }
-                else if(isEnPassant(board, new move_t(pos,moved)))
-                {
-                    moves.Add(moved);
-                }
             }
 
             if (verify_check)
@@ -479,20 +464,6 @@ namespace Chess
                 }
             }
             return moves;
-        }
-
-        public static bool isEnPassant(ChessBoard b, move_t m)
-        {
-            int step = ((b.Grid[m.from.number][m.from.letter].player == Player.JEDI) ? -1 : 1);
-
-            return (
-                b.Grid[m.from.number][m.from.letter].piece == Piece.TROOPS &&
-                b.Grid[m.to.number][m.to.letter].piece == Piece.NONE &&
-                m.to.letter != m.from.letter &&
-                b.Grid[m.to.number + step][m.to.letter].piece == Piece.TROOPS &&
-                b.LastMove[(b.Grid[m.from.number][m.from.letter].player == Player.JEDI) ? Player.SITH : Player.JEDI].Equals(new position_t(m.to.letter, m.to.number + step)) &&
-                Math.Abs(b.Grid[m.to.number + step][m.to.letter].lastPosition.number - (m.to.number + step)) == 2 //jumped from last position
-                );
         }
     }
 }
